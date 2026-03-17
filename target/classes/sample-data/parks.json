@@ -1,0 +1,16 @@
+[
+  {
+    "facility_name": "Golden Gate Park",
+    "facility_type": "Park",
+    "address": "501 Stanyan St, San Francisco, CA 94117",
+    "hours": "5:00 AM - 12:00 AM",
+    "description": "Large urban park with gardens, museums, and trails."
+  },
+  {
+    "facility_name": "Dolores Park",
+    "facility_type": "Park",
+    "address": "Dolores St & 19th St, San Francisco, CA 94114",
+    "hours": "6:00 AM - 10:00 PM",
+    "description": "Popular hillside park with skyline views."
+  }
+]

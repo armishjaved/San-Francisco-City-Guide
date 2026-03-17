@@ -1,0 +1,14 @@
+[
+  {
+    "landmark_name": "Coit Tower",
+    "address": "1 Telegraph Hill Blvd, San Francisco, CA 94133",
+    "description": "Art Deco tower with panoramic city views.",
+    "designation": "Historic Landmark"
+  },
+  {
+    "landmark_name": "Ferry Building",
+    "address": "1 Ferry Building, San Francisco, CA 94111",
+    "description": "Marketplace and iconic waterfront building.",
+    "designation": "Historic"
+  }
+]

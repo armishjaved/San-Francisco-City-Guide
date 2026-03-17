@@ -1,0 +1,22 @@
+[
+  {
+    "business_name": "Yamo Restaurant",
+    "business_address": "3406 18th St",
+    "business_city": "San Francisco",
+    "business_postal_code": "94110",
+    "inspection_score": "93",
+    "risk_category": "Low Risk",
+    "inspection_date": "2019-08-06T00:00:00.000",
+    "description": "Burmese eats in the Mission."
+  },
+  {
+    "business_name": "Golden Chariot",
+    "business_address": "299 2nd St",
+    "business_city": "San Francisco",
+    "business_postal_code": "94105",
+    "inspection_score": "88",
+    "risk_category": "Moderate Risk",
+    "inspection_date": "2019-07-20T00:00:00.000",
+    "description": "Indian lunch spot near SOMA."
+  }
+]

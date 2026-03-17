@@ -1,0 +1,16 @@
+[
+  {
+    "org_name": "SF Rec Park",
+    "event_name": "Family Nature Walk",
+    "event_description": "Guided family-friendly walk in a city park.",
+    "event_start_date": "2025-12-20T10:00:00.000",
+    "event_end_date": "2025-12-20T11:30:00.000"
+  },
+  {
+    "org_name": "SF Public Library",
+    "event_name": "Kids Story Time",
+    "event_description": "Stories and songs for young children.",
+    "event_start_date": "2025-12-18T16:00:00.000",
+    "event_end_date": "2025-12-18T16:30:00.000"
+  }
+]
