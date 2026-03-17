@@ -58,5 +58,4 @@ The project architecture leverages several core Java technologies and frameworks
 
 ---
 
-**Author:** Armish Javed (aj4513)  
-**Course:** Intro to Java - Final Project Proposal
+**Author:** Armish Javed 
