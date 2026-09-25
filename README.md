@@ -1,61 +1,69 @@
-# SF Explorer - A San Francisco City Guide
+# SF Explorer: A San Francisco City Guide
 
-**SF Explorer** is a Java-based interactive application designed to serve as a comprehensive guide to San Francisco. By merging software engineering principles with user-centered design, this project provides a data-driven experience for exploring dining, attractions, and local events.
+A Java desktop app for exploring San Francisco. Browse restaurants, landmarks, events, and parks using live data from the city's open data portal, sign in with a secure account, and save favorites to a local database.
 
----
+## Features
 
-## 🚀 Project Overview
-The application aims to showcase technical proficiency in Java while providing a practical utility for residents and tourists alike. Key highlights include:
-* **Interactive Design**: A Java Swing GUI featuring categorized tabs such as "Eat & Drink," "Attractions," "Events," and "Outdoor Activities".
-* **Real-Time Data**: Integration with remote servers and APIs to fetch live details on restaurant ratings, cuisine types, and upcoming exhibitions.
-* **Performance & Security**: Utilization of multithreading for responsive data loading and encrypted credential management for user security.
+- **Four categories:** Eat & Drink, Attractions, Events, and Outdoor, each in its own tab.
+- **Live city data:** pulls places from **DataSF**, San Francisco's open data API. If the network is unavailable, it falls back to bundled sample data so the app always runs.
+- **Responsive UI:** data loads on background threads, so the interface never freezes while requests are in flight.
+- **Accounts and favorites:** users sign in, save favorite places, and check in. Everything is stored in a local SQLite database.
+- **Secure passwords:** passwords are never stored in plain text (see Security below).
 
----
+## How it's built
 
-## 🛠️ Technical Components
-The project architecture leverages several core Java technologies and frameworks:
+| Area | What's used |
+|---|---|
+| UI | Java Swing |
+| Networking | Java `HttpClient` (Java 11+) calling DataSF's Socrata API |
+| JSON | Jackson |
+| Database | SQLite through JDBC |
+| Concurrency | `ExecutorService` thread pool for API calls; background threads for database work |
+| Security | PBKDF2 password hashing with salt and pepper |
+| Build | Maven, Java 17 |
 
-| Component | Technology / Library | Purpose |
-| :--- | :--- | :--- |
-| **GUI** | Java Swing | Interface for browsing and searching city locations. |
-| **Networking** | Java Sockets / HTTPClient |Fetching live data from online APIs. |
-| **Database** | MySQL or SQLite + JDBC | Storing user favorites and preferences. |
-| **Multithreading** | Java Threads / Executors | Handling background data loading and UI responsiveness. |
-| **Framework** | Spring Boot | Dependency injection, modular design, and scalability. |
+### Concurrency
+- API requests run on a **fixed thread pool** (`ExecutorService`), so switching tabs and loading data doesn't block the Swing UI thread.
+- Database writes run on background threads and **retry with backoff** if SQLite is briefly locked.
 
----
+### Security
+- Passwords are hashed with **PBKDF2 (HMAC-SHA256)** at **120,000 iterations**.
+- Each password gets a random **16-byte salt**, plus an app-wide **pepper**.
+- Logins are checked with a **constant-time comparison** to avoid timing attacks.
 
-## ✨ Core Features
-* **Search & Explore**: Users can search by keyword or category and click items to view detailed descriptions and ratings.
-* **Live Integration**: Retrieves restaurant names, addresses for navigation, and event schedules via HTTP requests.
-* **Personalized Favorites**: Features a system where favorite locations are saved to a local database using JDBC-based CRUD operations.
-* **Concurrent Processing**: Employs worker threads to process multiple API requests simultaneously without freezing the interface.
-* **Secure Authentication**: User login information is protected using encryption with salt and pepper.
+### Data
+- Live endpoints (DataSF): restaurants, landmarks, events, and Rec & Park facilities.
+- Offline fallback: JSON samples in `src/main/resources/sample-data/`.
+- The database is created automatically at `~/.sfexplorer/sfexplorer.db`, with tables for `users`, `favorites`, and `checkins`.
 
----
+## Project structure
 
-## 🏁 Getting Started
+```
+src/main/java/com/sfexplorer/
+  App.java                  Entry point
+  ui/                       Swing screens: main window, category tabs, favorites, login
+  service/                  DataSF client (HttpClient) and place loading with offline fallback
+  db/                       SQLite setup and repositories for users, favorites, check-ins
+  security/PasswordHasher   PBKDF2 hashing with salt and pepper
+  model/                    Place and Category
+  util/                     JSON-to-Place mapping
+```
 
-### Prerequisites
-* **Java Development Kit (JDK)**: Required to run the Swing application and Spring Boot framework.
-* **Database**: Access to a local **SQLite** or **MySQL** instance.
-* **Network Access**: Required for the application to reach remote servers and retrieve live data.
+## Run it
 
-### Installation & Execution
-1. **Clone the Repository**: Download the source code to your local machine.
-2. **Database Setup**: 
-    * Ensure your MySQL or SQLite environment is active.
-    * The application uses **JDBC** to establish connectivity for storing favorites.
-3. **Dependency Management**: Use **Spring Boot** to handle necessary libraries and modular structure.
-4. **Run**: Launch the application to be greeted by the main dashboard.
+You need **Java 17+** and **Maven**.
 
-### Sample User Flow
-1. Select a category like **"Food & Drinks"**.
-2. The app fetches data in the background via HTTP requests in worker threads.
-3. View results in a scrollable list with ratings and locations.
-4. Click an entry to **"Add to Favorites"**.
-5. Access your stored favorites later from the local database.
+```bash
+git clone https://github.com/armishjaved/San-Francisco-City-Guide.git
+cd San-Francisco-City-Guide
+mvn compile exec:java -Dexec.mainClass=com.sfexplorer.App
+```
 
----
+Create an account in the login window, pick a category, and start saving favorites.
 
-**Author:** Armish Javed 
+## What I'd improve next
+
+- Add a search bar across all categories
+- Cache API responses so repeat visits load instantly
+- Move the pepper out of the source code into an environment variable
+- Add unit tests for the password hasher and repositories
